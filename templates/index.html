@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Локальный Чат</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        /* Лоадер для модального окна */
+        .loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Модальное окно для ввода ника -->
+    <div id="nickname-modal" class="modal">
+        <div class="modal-content">
+            <h2>Добро пожаловать в чат!</h2>
+            <p>Выберите ваш уникальный никнейм</p>
+            
+            <div class="input-group" style="margin: 20px 0;">
+                <input 
+                    type="text" 
+                    id="nickname-input" 
+                    placeholder="КрутойКотик123" 
+                    maxlength="20"
+                    autocomplete="off"
+                >
+                <div class="loader" id="nickname-loader"></div>
+            </div>
+            
+            <button id="save-nickname" class="glow-button">
+                <span>Продолжить</span>
+            </button>
+            
+            <div class="theme-switcher">
+                <button id="theme-toggle-mobile">🌙</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной интерфейс чата -->
+    <div class="chat-container" style="display:none;">
+        <!-- Шапка чата -->
+        <header>
+            <div class="header-left">
+                <button id="menu-toggle" class="icon-button">☰</button>
+                <h1>Локальный Чат</h1>
+            </div>
+            <div class="header-right">
+                <span id="online-count">👥 1</span>
+                <button id="theme-toggle" class="icon-button">🌙</button>
+            </div>
+        </header>
+        
+        <!-- Боковое меню (скрыто по умолчанию) -->
+        <div id="side-menu" class="side-menu">
+            <div class="menu-header">
+                <h3>Настройки</h3>
+                <button id="close-menu" class="icon-button">✕</button>
+            </div>
+            <div class="menu-content">
+                <div class="menu-item">
+                    <label for="change-nickname">Изменить никнейм</label>
+                    <input 
+                        type="text" 
+                        id="change-nickname" 
+                        placeholder="Новый никнейм"
+                    >
+                    <button id="save-new-nickname">Сохранить</button>
+                </div>
+                <div class="menu-item">
+                    <button id="clear-chat">Очистить чат</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Область сообщений -->
+        <div class="message-area" id="messages">
+            <div class="welcome-message">
+                <p>Чат готов к использованию!</p>
+                <small>Сообщения будут появляться здесь</small>
+            </div>
+        </div>
+        
+        <!-- Панель ввода -->
+        <div class="input-area">
+            <button id="emoji-toggle" class="icon-button">😊</button>
+            <input 
+                type="text" 
+                id="message-input" 
+                placeholder="Напишите сообщение..." 
+                autocomplete="off"
+            >
+            <button id="send-btn" class="send-button">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Эмодзи-панель (скрыта по умолчанию) -->
+    <div id="emoji-picker" class="emoji-picker">
+        <div class="emoji-categories">
+            <button data-category="smileys">😀</button>
+            <button data-category="animals">🐶</button>
+            <button data-category="food">🍎</button>
+        </div>
+        <div class="emoji-container" id="emoji-container"></div>
+    </div>
+
+    <script src="/static/script.js" defer></script>
+</body>
+</html>
